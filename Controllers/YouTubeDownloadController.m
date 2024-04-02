@@ -7,6 +7,7 @@
 #import "../AFNetworking/AFNetworking.h"
 
 @interface YouTubeDownloadController () {
+    Statistics *statistics;
     UIImageView *artworkImage;
     UILabel *titleLabel;
     UILabel *downloadPercentLabel;
@@ -28,6 +29,10 @@
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 
     [self coloursView];
+
+    self.hud = [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
+    self.hud.mode = MBProgressHUDModeAnnularDeterminate;
+    self.hud.label.text = @"";
 
     UIWindow *boundsWindow = [[[UIApplication sharedApplication] windows] firstObject];
 
@@ -75,13 +80,9 @@
     [self.view addSubview:noticeLabel];
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.modalInPresentation = YES;
-
-    self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    self.hud.mode = MBProgressHUDModeAnnularDeterminate;
-    self.hud.label.text = @"";
+- (void)viewDidLoad { // OLD
+    [super viewDidLoad]; // OLD
+    self.modalInPresentation = YES; // OLD
 
     if (self.downloadOption == 0) {
         [self videoDownloaderPartOne];
@@ -115,6 +116,10 @@
 }
 
 - (void)videoDownloaderPartTwo {
+    self.hud = [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
+    self.hud.mode = MBProgressHUDModeAnnularDeterminate;
+    self.hud.label.text = @"";
+
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
     NSURLRequest *request = [NSURLRequest requestWithURL:self.audioURL];
@@ -137,12 +142,17 @@
         [[NSFileManager defaultManager] removeItemAtPath:[filePath path] error:nil];
         [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/video.mp4", documentsDirectory] error:nil];
         [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@/audio.mp3", documentsDirectory] error:nil];
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil]; // for previous Download Menu
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
     [downloadTask resume];
 }
 
 - (void)audioDownloader {
+    self.hud = [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
+    self.hud.mode = MBProgressHUDModeAnnularDeterminate;
+    self.hud.label.text = @"";
+
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
     NSURLRequest *request = [NSURLRequest requestWithURL:self.audioURL];
@@ -161,12 +171,17 @@
         NSCharacterSet *notAllowedChars = [[NSCharacterSet alphanumericCharacterSet] invertedSet];
         [MobileFFmpeg execute:[NSString stringWithFormat:@"-i %@ -c:a libmp3lame -q:a 8 %@/%@.mp3", filePath, documentsDirectory, [[self.downloadTitle componentsSeparatedByCharactersInSet:notAllowedChars] componentsJoinedByString:@""]]];
         [[NSFileManager defaultManager] removeItemAtPath:[filePath path] error:nil];
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil]; // for previous Download Menu
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
     [downloadTask resume];
 }
 
 - (void)shortsDownloader {
+    self.hud = [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
+    self.hud.mode = MBProgressHUDModeAnnularDeterminate;
+    self.hud.label.text = @"";
+
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     AFURLSessionManager *manager = [[AFURLSessionManager alloc] initWithSessionConfiguration:configuration];
     NSURLRequest *request = [NSURLRequest requestWithURL:self.dualURL];
@@ -185,17 +200,19 @@
         NSCharacterSet *notAllowedChars = [[NSCharacterSet alphanumericCharacterSet] invertedSet];
         [[NSFileManager defaultManager] moveItemAtPath:[filePath path] toPath:[NSString stringWithFormat:@"%@/%@.mp4", documentsDirectory, [[self.downloadTitle componentsSeparatedByCharactersInSet:notAllowedChars] componentsJoinedByString:@""]] error:nil];
         [[NSFileManager defaultManager] removeItemAtPath:[filePath path] error:nil];
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil]; // for previous Download Menu
         [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
     [downloadTask resume];
 }
 
 - (void)coloursView {
-    if (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleLight) {
-        self.view.backgroundColor = [UIColor colorWithRed:0.949 green:0.949 blue:0.969 alpha:1.0];
-    } else {
-        self.view.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0];
-    }
+    self.view.backgroundColor = [UIColor clearColor];
+    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+    UIVisualEffectView *blurEffectView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
+    blurEffectView.frame = self.view.bounds;
+    [self.view addSubview:blurEffectView];
+    [self.view sendSubviewToBack:blurEffectView];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
@@ -216,6 +233,10 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [MobileFFmpeg cancel];
     });
+}
+
+- (void)cancelHUD:(UIButton *)sender {
+    [self.hud hideAnimated:YES];
 }
 
 @end

@@ -139,7 +139,7 @@
             }
         }
     }
-    if (indexPath.section == 4) {
+   /* if (indexPath.section == 4) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ImportExportCell"];
         if (cell == nil) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ImportExportCell"];
@@ -148,7 +148,7 @@
             } else {
                 cell.textLabel.text = LOC(@"IMPORT_OPTIONS");
             }
-        }
+        }*/
         return cell;
     }
     return cell;

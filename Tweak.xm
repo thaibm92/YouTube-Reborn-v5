@@ -851,7 +851,7 @@ static UIButton *makeUnderRebornPlayerButton(ELMCellNode *node, NSString *title,
 - (BOOL)touchesShouldCancelInContentView:(id)arg1 {
     return YES; // Ensure we can scroll
 }
-
+/*
 - (ELMCellNode *)nodeForItemAtIndexPath:(NSIndexPath *)indexPath {
     if ([self.accessibilityIdentifier isEqualToString:@"id.video.scrollable_action_bar"] && !self.rebornOverlayButton) {
         self.contentInset = UIEdgeInsetsMake(0, 0, 0, 73);
@@ -871,7 +871,7 @@ static UIButton *makeUnderRebornPlayerButton(ELMCellNode *node, NSString *title,
     }
     return %orig;
 }
-
+*/
 - (void)nodesDidRelayout:(NSArray <ELMCellNode *> *)nodes {
     if ([self.accessibilityIdentifier isEqualToString:@"id.video.scrollable_action_bar"] && [nodes count] == 1) {
         CGFloat offset = nodes[0].calculatedSize.width - [nodes[0].layoutAttributes frame].size.width;

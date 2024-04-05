@@ -148,9 +148,9 @@
             } else {
                 cell.textLabel.text = LOC(@"IMPORT_OPTIONS");
             }
-        }*/
+        }
         return cell;
-    }
+    }*/
     return cell;
 }
 

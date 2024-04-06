@@ -57,7 +57,7 @@
         return 2;
     }
     if (section == 4) {
-        return 2;
+        return 0;
     }
     return 0;
 }
@@ -94,21 +94,21 @@
         }
         if (indexPath.section == 1) {
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            if (indexPath.row == 0) {
+           /* if (indexPath.row == 0) {
                 cell.textLabel.text = LOC(@"HIDE_PLAYER_OVERLAY_OP_BUTTON");
                 UISwitch *hideRebornPlayerOPButton = [[UISwitch alloc] initWithFrame:CGRectZero];
                 [hideRebornPlayerOPButton addTarget:self action:@selector(toggleHideRebornPlayerOPButton:) forControlEvents:UIControlEventValueChanged];
                 hideRebornPlayerOPButton.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kHideRebornOPButtonVThree"];
                 cell.accessoryView = hideRebornPlayerOPButton;
-            }
-            if (indexPath.row == 1) {
+            }*/
+            if (indexPath.row == 0) {
                 cell.textLabel.text = LOC(@"HIDE_VIDEO_OVERLAY_OP_BUTTON");
                 UISwitch *hideRebornOPButton = [[UISwitch alloc] initWithFrame:CGRectZero];
                 [hideRebornOPButton addTarget:self action:@selector(toggleHideRebornOPButton:) forControlEvents:UIControlEventValueChanged];
                 hideRebornOPButton.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kHideRebornOPButtonVTwo"];
                 cell.accessoryView = hideRebornOPButton;
             }
-            if (indexPath.row == 2) {
+            if (indexPath.row == 1) {
                 cell.textLabel.text = LOC(@"HIDE_SHORTS_OVERLAY_OP_BUTTON");
                 UISwitch *hideRebornShortsOPButton = [[UISwitch alloc] initWithFrame:CGRectZero];
                 [hideRebornShortsOPButton addTarget:self action:@selector(toggleHideRebornShortsOPButton:) forControlEvents:UIControlEventValueChanged];
